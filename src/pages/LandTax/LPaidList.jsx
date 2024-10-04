@@ -6,10 +6,11 @@ import Button from "@mui/material/Button";
 import { Stack, Typography } from "@mui/material";
 import TaxDecModal from "../../components/TaxDecModal";
 import {
-  ASSESSMENT_ROLL_COLUMN,
-  ASSESSMENT_ROLL_TAB_LINKS,
+  COMPUTED_COLUMN,
+  LANDTAX_TAB_LINKS,
 } from "../../utils/constant";
 import { CreateNewFolderOutlined } from "@mui/icons-material";
+import Payment from "../Cash/Payment";
 
 const rows = [
   {
@@ -40,16 +41,23 @@ const rows = [
   },
 ];
 
-function AssessmentRoll() {
+function LPaidList() {
   const [taxdecModalOpen, setTaxdecModalOpen] = useState(false);
+  const [openPayment, setOpenPayment] = useState(false);
+  const [selectedRow, setSelectedRow] = useState(null); // State to hold clicked row data
 
   const handleButtonClick = () => {
     setTaxdecModalOpen(true);
   };
 
+  const handleCellDoubleClick = (params) => {
+    setSelectedRow(params.row); // Capture the double-clicked row data
+    setOpenPayment(true); // Open RPTview when a cell is double-clicked
+  };
+
   return (
     <>
-      <Tab links={ASSESSMENT_ROLL_TAB_LINKS} />
+      <Tab links={LANDTAX_TAB_LINKS} />
 
       <Box sx={{ p: 2, boxSizing: "border-box" }}>
         <Box
@@ -64,25 +72,18 @@ function AssessmentRoll() {
         >
           <Stack>
             <Typography variant="h6" fontWeight={600}>
-              ASSESSOR OFFICE
+              LANDTAX OFFICE
             </Typography>
             <Typography variant="body2">
-              Office of the Property Appraiser
+                Office of the Revenue Commissioner
             </Typography>
           </Stack>
-          <Button
-            onClick={handleButtonClick}
-            variant="contained"
-            startIcon={<CreateNewFolderOutlined />}
-          >
-            Add Taxdec
-          </Button>
         </Box>
 
         <Box height={`calc(100vh - ${246}px)`} width="100%">
           <DataGrid
             rows={rows}
-            columns={ASSESSMENT_ROLL_COLUMN}
+            columns={COMPUTED_COLUMN}
             initialState={{
               pagination: {
                 paginationModel: {
@@ -92,6 +93,7 @@ function AssessmentRoll() {
             }}
             pageSizeOptions={[10]}
             disableRowSelectionOnClick
+            onCellDoubleClick={handleCellDoubleClick}
             sx={{
               ".data-grid-header": {
                 bgcolor: "primary.main",
@@ -113,6 +115,24 @@ function AssessmentRoll() {
         </Box>
       </Box>
 
+      <Payment 
+        open={openPayment} // Ensure this state is passed as the open prop
+        handleClose={() => setOpenPayment(false)} 
+        row={selectedRow} 
+        Title={
+          <>
+          PAID | REAL PROPERTY TAX ORDER OF PAYMENT
+          </>
+        }
+        actionButton={
+          <>
+          <Button variant="contained">
+            PROCEED TO PAYMENT
+          </Button>
+          </>
+        }
+      />
+
       <TaxDecModal
         open={taxdecModalOpen}
         handleClose={() => setTaxdecModalOpen(false)}
@@ -121,4 +141,4 @@ function AssessmentRoll() {
   );
 }
 
-export default AssessmentRoll;
+export default LPaidList;
