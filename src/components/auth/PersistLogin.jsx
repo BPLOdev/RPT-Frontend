@@ -8,6 +8,8 @@ import {
 } from "@mui/material";
 import UseRefreshToken from "../../hooks/useRefreshToken";
 import useAuth from "../../hooks/useAuth";
+import backgroundImage from "../../assets/images/bg-img1.jpg";
+import logo from "../../assets/images/favicon.svg";
 
 const PersistLogin = () => {
   const [isLoading, setIsLoading] = useState(true);
@@ -32,14 +34,41 @@ const PersistLogin = () => {
       {isLoading ? (
         <Box
           sx={{
+            backgroundImage: `linear-gradient(rgba(12, 19, 99, .7), rgba(12, 19, 99, .7)), url(${backgroundImage})`,
+            backgroundRepeat: "no-repeat",
+            backgroundSize: "cover",
             display: "flex",
             width: "100%",
             height: "100vh",
-            justifyContent: "center",
+            justifyContent: "space-evenly",
             alignItems: "center",
+            flexDirection: "column",
           }}
         >
-          <Typography variant="h1">Loading...</Typography>
+          <Box>
+            <Typography
+              variant="h3"
+              style={{ color: "white", fontWeight: "bold" }}
+            >
+              REAL PROPERTY TAX MANAGEMENT SYSTEM
+            </Typography>
+          </Box>
+          <img src={logo} alt="logo" width={"15%"} />
+          <Box
+            sx={{
+              width: "45vw",
+            }}
+          >
+            <Typography
+              variant="h6"
+              style={{
+                color: "white",
+              }}
+            >
+              Loading Please Wait...
+            </Typography>
+            <LinearProgress />
+          </Box>
         </Box>
       ) : (
         <Outlet />
